@@ -384,7 +384,8 @@
 .reserve-float{
   position: fixed;
   right: 20px;
-  top: 96px;               /* ヘッダーの高さに合わせて調整OK */
+  bottom: 20px;   /* ← ここがポイント */
+  top: auto;      /* ← 上指定を無効化 */
   z-index: 1000;
   width: 280px;
 }
@@ -437,11 +438,9 @@
   color: #888;
 }
 
-/* 右側固定が本文にかぶるのを避ける（PCのみ） */
-@media (min-width: 900px){
-  main.container{
-    padding-right: 320px; /* 予約ボックス分の余白 */
-  }
+/* ④ 予約ボックスを少し浮かせる影（控えめ） */
+.reserve-card{
+  box-shadow: 0 8px 20px rgba(0,0,0,.35);
 }
 
 /* スマホ：右固定は邪魔なので、画面下に固定 */
