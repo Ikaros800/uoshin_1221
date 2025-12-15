@@ -1,104 +1,607 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>【魚心】｜個人経営の飲食店</title>
-<style>
-/* 省略せずそのまま使える設計 */
-body{
-  margin:0;
-  font-family: system-ui, -apple-system, "Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
-  background:#111;
-  color:#eee;
-  line-height:1.8;
-}
-a{color:#d9c3a2;text-decoration:none;}
-.container{max-width:960px;margin:auto;padding:24px;}
-header{border-bottom:1px solid #333;}
-nav ul{display:flex;gap:16px;list-style:none;padding:0;}
-section{margin-top:48px;}
-h1,h2{font-weight:500;}
-table{width:100%;border-collapse:collapse;}
-td,th{padding:12px;border-bottom:1px solid #333;}
-footer{margin-top:64px;font-size:12px;color:#aaa;}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="落ち着いた個人店の飲食店ホームページ。店舗紹介、こだわり、メニュー、営業時間、アクセス、問い合わせ。" />
+  <title>魚心｜落ち着いた個人店</title>
+  <style>
+    :root{
+      --bg:#0f1012;
+      --panel:#15171a;
+      --text:#e9e6df;
+      --muted:#bdb8ae;
+      --line:rgba(233,230,223,.14);
+      --accent:#d9c3a2;
+      --accent2:#b9935a;
+      --shadow: 0 12px 32px rgba(0,0,0,.35);
+      --radius: 18px;
+      --max: 1040px;
+      --serif: ui-serif, "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", "MS Mincho", serif;
+      --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+    }
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 20% 10%, rgba(217,195,162,.12), transparent 55%),
+        radial-gradient(1000px 600px at 80% 20%, rgba(185,147,90,.10), transparent 60%),
+        linear-gradient(180deg, #0b0c0f 0%, var(--bg) 60%, #0b0c0f 100%);
+      font-family: var(--sans);
+      line-height:1.75;
+      letter-spacing:.02em;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .container{ width:min(var(--max), calc(100% - 40px)); margin:0 auto; }
+
+    /* Header / Nav */
+    header{
+      position:sticky; top:0; z-index:30;
+      backdrop-filter: blur(10px);
+      background: rgba(15,16,18,.72);
+      border-bottom:1px solid var(--line);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+      gap:16px;
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:2px;
+      min-width: 210px;
+    }
+    .brand .name{
+      font-family: var(--serif);
+      font-size: 18px;
+      letter-spacing:.08em;
+    }
+    .brand .tag{
+      font-size:12px; color:var(--muted);
+    }
+    nav ul{
+      list-style:none; display:flex; gap:18px; padding:0; margin:0;
+      flex-wrap:wrap; justify-content:flex-end;
+    }
+    nav a{
+      font-size:13px;
+      color: var(--muted);
+      padding:8px 10px;
+      border-radius: 999px;
+      border:1px solid transparent;
+      transition: .2s ease;
+    }
+    nav a:hover{
+      color:var(--text);
+      border-color: var(--line);
+      background: rgba(233,230,223,.05);
+    }
+
+    /* Hero */
+    .hero{
+      padding: 44px 0 26px;
+    }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:stretch;
+    }
+    .card{
+      background: linear-gradient(180deg, rgba(21,23,26,.92) 0%, rgba(16,17,19,.92) 100%);
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero-main{ padding: 28px 26px; position:relative; overflow:hidden; }
+    .hero-main:before{
+      content:"";
+      position:absolute; inset:-1px;
+      background: radial-gradient(500px 240px at 18% 22%, rgba(217,195,162,.16), transparent 60%),
+                  radial-gradient(420px 260px at 82% 38%, rgba(185,147,90,.12), transparent 62%);
+      pointer-events:none;
+      opacity:.9;
+    }
+    .hero-main > *{ position:relative; }
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing:.14em;
+      text-transform: uppercase;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      box-shadow: 0 0 0 4px rgba(217,195,162,.12);
+    }
+    h1{
+      margin: 10px 0 8px;
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.6vw, 42px);
+      letter-spacing: .06em;
+      line-height:1.25;
+    }
+    .lead{
+      margin: 0 0 16px;
+      color: var(--muted);
+      max-width: 60ch;
+      font-size: 15px;
+    }
+    .hero-actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top: 16px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 11px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(233,230,223,.06);
+      color: var(--text);
+      font-size: 13px;
+      transition:.2s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(233,230,223,.09); }
+    .btn.primary{
+      border-color: rgba(217,195,162,.35);
+      background: linear-gradient(135deg, rgba(217,195,162,.20), rgba(185,147,90,.14));
+    }
+
+    .hero-side{
+      padding: 22px 20px;
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .mini{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 14px;
+      background: rgba(233,230,223,.03);
+    }
+    .mini .label{ font-size:12px; color: var(--muted); letter-spacing:.08em; }
+    .mini .value{ margin-top:6px; font-size:14px; }
+    .mini a{ color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Sections */
+    main{ padding: 14px 0 64px; }
+    section{ scroll-margin-top: 80px; }
+    .section{
+      margin-top: 18px;
+      padding: 22px 22px;
+    }
+    .section h2{
+      margin: 0 0 12px;
+      font-family: var(--serif);
+      font-size: 20px;
+      letter-spacing:.06em;
+    }
+    .sub{
+      color: var(--muted);
+      margin: -6px 0 14px;
+      font-size: 13px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .box{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px 16px;
+      background: rgba(233,230,223,.03);
+    }
+    .box h3{
+      margin:0 0 8px;
+      font-size: 14px;
+      letter-spacing:.06em;
+      color: var(--text);
+    }
+    .box p, .box ul{
+      margin:0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .box ul{ padding-left: 18px; }
+    .hr{
+      height:1px; background: var(--line);
+      margin: 14px 0;
+    }
+
+    /* Menu table */
+    .menu{
+      width:100%;
+      border-collapse: collapse;
+      overflow:hidden;
+      border-radius: 14px;
+      border:1px solid var(--line);
+    }
+    .menu th, .menu td{
+      padding: 12px 12px;
+      text-align:left;
+      border-bottom:1px solid var(--line);
+      vertical-align: top;
+      font-size: 14px;
+    }
+    .menu th{
+      color: var(--muted);
+      font-weight: 600;
+      background: rgba(233,230,223,.04);
+      letter-spacing:.06em;
+    }
+    .menu tr:last-child td{ border-bottom:none; }
+    .price{
+      white-space:nowrap;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+    }
+    .note{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 10px;
+    }
+
+    /* Access map embed */
+    .map{
+      border:1px solid var(--line);
+      border-radius: 14px;
+      overflow:hidden;
+      background:#111;
+      min-height: 320px;
+    }
+    iframe{ width:100%; height: 320px; border:0; }
+
+    /* Contact */
+    form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      margin-top: 8px;
+    }
+    .full{ grid-column: 1 / -1; }
+    label{
+      display:block;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+      letter-spacing:.06em;
+    }
+    input, textarea{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border:1px solid var(--line);
+      background: rgba(233,230,223,.03);
+      color: var(--text);
+      font-size: 14px;
+      outline: none;
+    }
+    textarea{ min-height: 130px; resize: vertical; }
+    input:focus, textarea:focus{
+      border-color: rgba(217,195,162,.45);
+      box-shadow: 0 0 0 4px rgba(217,195,162,.10);
+    }
+    .contact-actions{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      margin-top: 10px;
+    }
+    .hint{
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Footer */
+    footer{
+      border-top: 1px solid var(--line);
+      padding: 22px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 860px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      .brand{ min-width: auto; }
+      nav ul{ gap:10px; }
+      .grid{ grid-template-columns: 1fr; }
+      form{ grid-template-columns: 1fr; }
+      iframe{ height: 300px; }
+    }
+
+    /* Reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      html{ scroll-behavior:auto; }
+      .btn{ transition:none; }
+    }
+  </style>
 </head>
 
 <body>
-<header>
-  <div class="container">
-    <h1>【魚心】</h1>
-    <p>【旨い魚と日本酒の店】</p>
-    <nav>
-      <ul>
-        <li><a href="#about">店舗紹介</a></li>
-        <li><a href="#policy">店長のこだわり</a></li>
-        <li><a href="#menu">メニュー</a></li>
-        <li><a href="#hours">営業時間</a></li>
-        <li><a href="#access">アクセス</a></li>
-        <li><a href="#contact">問い合わせ</a></li>
-      </ul>
-    </nav>
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="#top" aria-label="ページ先頭へ">
+          <div class="name">◯◯食堂</div>
+          <div class="tag">静かに食べる、丁寧に作る。</div>
+        </a>
+
+        <nav aria-label="ページ内ナビゲーション">
+          <ul>
+            <li><a href="#about">店舗紹介</a></li>
+            <li><a href="#policy">店長のこだわり</a></li>
+            <li><a href="#menu">メニュー</a></li>
+            <li><a href="#hours">営業時間</a></li>
+            <li><a href="#access">アクセス</a></li>
+            <li><a href="#contact">問い合わせ</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div id="top" class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="card hero-main">
+          <div class="kicker"><span class="dot"></span> Private dining · since 20XX</div>
+          <h1>毎日食べても、<br>少しだけ心が整うごはん。</h1>
+          <p class="lead">
+            ◯◯食堂は、素材の持ち味を引き立てる「引き算の味つけ」と、落ち着いた空間で、
+            ひとりでも入りやすい定食・小皿をお出ししています。
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#menu">メニューを見る</a>
+            <a class="btn" href="#access">アクセス</a>
+            <a class="btn" href="#contact">問い合わせ</a>
+          </div>
+        </div>
+
+        <aside class="card hero-side" aria-label="店舗情報サマリー">
+          <div class="mini">
+            <div class="label">住所</div>
+            <div class="value">〒000-0000 東京都◯◯区◯◯ 1-2-3</div>
+          </div>
+          <div class="mini">
+            <div class="label">営業時間</div>
+            <div class="value">11:30–14:30 / 17:30–21:30（L.O. 各30分前）</div>
+          </div>
+          <div class="mini">
+            <div class="label">定休日</div>
+            <div class="value">火曜日（祝日の場合は営業、翌日休み）</div>
+          </div>
+          <div class="mini">
+            <div class="label">予約</div>
+            <div class="value">席数が少ないため、事前のご連絡がおすすめです（<a href="#contact">問い合わせへ</a>）。</div>
+          </div>
+        </aside>
+      </div>
+    </div>
   </div>
-</header>
 
-<main class="container">
+  <main class="container">
 
-<section id="about">
-  <h2>店舗紹介</h2>
-  <p>
-    【店名】は、【創業年】より営業している個人経営の飲食店です。
-    落ち着いた雰囲気の中で、ゆっくり食事を楽しんでいただくことを大切にしています。
-  </p>
-</section>
+    <!-- 店舗紹介 -->
+    <section id="about" class="card section">
+      <h2>店舗紹介</h2>
+      <p class="sub">ゆっくり食事を楽しめる、小さな個人店です。</p>
+      <div class="grid">
+        <div class="box">
+          <h3>コンセプト</h3>
+          <p>
+            「毎日通える味」と「静かな居心地」。派手さよりも、丁寧さを大切にしています。
+            おひとり様、仕事帰り、休日の遅めのランチにもどうぞ。
+          </p>
+        </div>
+        <div class="box">
+          <h3>店内</h3>
+          <p>
+            カウンター席／テーブル席。香りが立ちすぎない換気と、会話を邪魔しない明るさを意識しています。
+          </p>
+        </div>
+      </div>
+    </section>
 
-<section id="policy">
-  <h2>店長のこだわり</h2>
-  <p>
-    食材の持ち味を活かし、派手さよりも日常に寄り添う味を意識しています。
-    毎日でも無理なく食べられることを大切にしています。
-  </p>
-</section>
+    <!-- こだわり -->
+    <section id="policy" class="card section">
+      <h2>店長のこだわり</h2>
+      <p class="sub">「何を足すか」より「何を削るか」。素材に合わせて整えます。</p>
 
-<section id="menu">
-  <h2>メニュー</h2>
-  <table>
-    <tr><th>カテゴリ</th><th>内容</th><th>価格</th></tr>
-    <tr><td>定食</td><td>主菜＋小鉢＋ごはん＋汁物</td><td>【価格】</td></tr>
-    <tr><td>一品</td><td>季節の小皿</td><td>【価格】</td></tr>
-    <tr><td>飲み物</td><td>ソフトドリンク／アルコール</td><td>【価格】</td></tr>
-  </table>
-</section>
+      <div class="grid">
+        <div class="box">
+          <h3>だし・火入れ</h3>
+          <p>
+            だしは毎朝引き、塩味は控えめに。火入れは「香り」と「食感」の境目を狙います。
+          </p>
+        </div>
+        <div class="box">
+          <h3>季節の小皿</h3>
+          <p>
+            旬の野菜を中心に、週替わりの小皿をご用意。食べ疲れしない構成を意識しています。
+          </p>
+        </div>
+        <div class="box">
+          <h3>米・味噌汁</h3>
+          <p>
+            お米は炊き上がりの香りを重視。味噌汁は具材ごとに味噌を使い分けています。
+          </p>
+        </div>
+        <div class="box">
+          <h3>心地よさ</h3>
+          <p>
+            料理が主役になるよう、BGMや照明は控えめに。慌ただしさのない時間を大切にしています。
+          </p>
+        </div>
+      </div>
+    </section>
 
-<section id="hours">
-  <h2>営業時間</h2>
-  <p>
-    営業時間：【営業時間】<br>
-    定休日：【定休日】
-  </p>
-</section>
+    <!-- メニュー -->
+    <section id="menu" class="card section">
+      <h2>メニュー</h2>
+      <p class="sub">価格は税込の目安です。仕入れにより内容が変わる場合があります。</p>
 
-<section id="access">
-  <h2>アクセス</h2>
-  <p>
-    住所：【住所】<br>
-    最寄駅：【最寄駅】
-  </p>
-</section>
+      <table class="menu" aria-label="メニュー一覧">
+        <thead>
+          <tr>
+            <th style="width:26%">カテゴリ</th>
+            <th>内容</th>
+            <th style="width:16%">価格</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>定食</td>
+            <td>本日の焼き魚定食（小鉢・味噌汁・ごはん）</td>
+            <td class="price">¥1,200</td>
+          </tr>
+          <tr>
+            <td>定食</td>
+            <td>鶏の照り焼き定食（小鉢・味噌汁・ごはん）</td>
+            <td class="price">¥1,100</td>
+          </tr>
+          <tr>
+            <td>小皿</td>
+            <td>季節野菜の揚げ浸し</td>
+            <td class="price">¥450</td>
+          </tr>
+          <tr>
+            <td>小皿</td>
+            <td>出汁巻き玉子</td>
+            <td class="price">¥500</td>
+          </tr>
+          <tr>
+            <td>ドリンク</td>
+            <td>自家製ほうじ茶／炭酸水／瓶ビール</td>
+            <td class="price">¥300〜</td>
+          </tr>
+        </tbody>
+      </table>
 
-<section id="contact">
-  <h2>問い合わせ</h2>
-  <p>
-    電話：【電話番号】<br>
-    メール：<a href="mailto:【メールアドレス】">【メールアドレス】</a>
-  </p>
-</section>
+      <div class="note">
+        ※ アレルギーや苦手食材がある場合は、できる範囲で調整します。お気軽にお声がけください。
+      </div>
+    </section>
 
-</main>
+    <!-- 営業時間 -->
+    <section id="hours" class="card section">
+      <h2>営業時間</h2>
+      <p class="sub">混雑時はお待ちいただく場合がございます。ご来店前のご連絡も歓迎です。</p>
 
-<footer class="container">
-  © 魚心
-</footer>
+      <div class="grid">
+        <div class="box">
+          <h3>ランチ</h3>
+          <p>11:30 – 14:30（L.O. 14:00）</p>
+          <div class="hr"></div>
+          <h3>ディナー</h3>
+          <p>17:30 – 21:30（L.O. 21:00）</p>
+        </div>
+        <div class="box">
+          <h3>定休日</h3>
+          <p>火曜日（祝日の場合は営業、翌日休み）</p>
+          <div class="hr"></div>
+          <h3>備考</h3>
+          <p>臨時休業はSNSまたは店頭掲示でお知らせします。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- アクセス -->
+    <section id="access" class="card section">
+      <h2>アクセス</h2>
+      <p class="sub">最寄駅から徒歩◯分。迷ったらお気軽にお電話ください。</p>
+
+      <div class="grid">
+        <div class="box">
+          <h3>所在地</h3>
+          <p>
+            神奈川県横浜市神奈川区六角橋1-8-2<br>
+            東急東横線：白楽駅 徒歩3分 175m
+          </p>
+          <div class="hr"></div>
+          <h3>目印</h3>
+          <p>◯◯交差点近く／◯◯ビル1F（看板は小さめです）</p>
+        </div>
+
+        <div class="box">
+          <h3>地図</h3>
+          <div class="map" role="img" aria-label="Googleマップ">
+            <!-- ここはお店の住所/地図URLに差し替えてください -->
+            <iframe
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://maps.app.goo.gl/V5P8k9UHJ2rg6W5b8"
+              title="Google Map">
+            </iframe>
+          </div>
+          <div class="note">※ 地図は「東京駅」の例です。住所に差し替えると正しく表示されます→修正済み。</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 問い合わせ -->
+    <section id="contact" class="card section">
+      <h2>問い合わせ</h2>
+      <p class="sub">ご予約・貸切・アレルギー等、お気軽にご連絡ください。</p>
+
+      <!--
+        GitHub Pages はサーバーサイドがないため、フォーム送信の受け皿が必要です。
+        1) 簡単：mailto（メール起動）
+        2) 実運用：Formspree / Googleフォーム / 無料フォームサービス 等
+        ここでは「mailto」を既定にしています。
+      -->
+      <div class="grid">
+        <div class="box">
+          <h3>連絡先</h3>
+          <p>
+            電話：045-423-6464（受付：営業時間に準ずる）<br>
+            メール：<a href="mailto:example@example.com">example@example.com</a>
+          </p>
+          <div class="hr"></div>
+          <p class="note">
+            ※ 営業中は電話に出られない場合があります。メールもご活用ください。
+          </p>
+        </div>
+
+        <div class="box">
+          <h3>フォーム（簡易）</h3>
+          <form action="mailto:example@example.com" method="post" enctype="text/plain">
+            <div>
+              <label for="name">お名前</label>
+              <input id="name" name="name" autocomplete="name" placeholder="例：山田 太郎" />
+            </div>
+            <div>
+              <label for="tel">電話番号</label>
+              <input id="tel" name="tel" autocomplete="tel" placeholder="例：090-1234-5678" />
+            </div>
+            <div class="full">
+              <label for="email">メールアドレス</label>
+              <input id="email" name="email" type="email" autocomplete="email" placeholder="例：taro@example.com" />
+            </div>
+            <div class="full">
+              <label for="message">お問い合わせ内容</label>
+              <textarea id="message" name="message" placeholder="ご予約希望日時、人数、ご要望など"></textarea>
+            </div>
+            <div class="full contact-actions">
+              <button class="btn primary" type="submit">メールで送信（メールアプリが開きます）</button>
+              <span class="hint">※ フォーム送信をWeb完結にしたい場合は Formspree 等に差し替えがおすすめです。</span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      <div>© <span id="y"></span> ◯◯食堂. All rights reserved.</div>
+      <div class="note">※ 店名・住所・電話・地図などは実情報に差し替えてご利用ください。</div>
+    </div>
+  </footer>
+
+  <script>
+    // 年号のみ自動更新（軽量）
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
